@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 
+ classpath:mapper/ProjectTypeMapper.xml
+ -->
+<mapper namespace="org.iqalliance.smallProject.meeting.dao.MeetingDAO">
+    <insert id="saveObject" useGeneratedKeys="true" keyProperty="id" parameterType="org.iqalliance.smallProject.meeting.entity.Meeting">
+    	INSERT INTO meeting
+    	(lecturerName,meetingTheme,meetingTime,pptUrl,videoUrl,imageUrl)
+    	VALUES
+    	(#{lecturerName},#{meetingTheme},#{meetingTime},#{pptUrl},#{videoUrl},#{imageUrl})
+    	<!-- <selectKey keyProperty="id" resultType="java.lang.Integer">
+      		select LAST_INSERT_ID() as id
+      	</selectKey> -->
+    </insert>
+    
+    <select id="getPageObjects" parameterType="org.iqalliance.smallProject.common.web.PageObject" resultType="org.iqalliance.smallProject.meeting.entity.Meeting">
+    	SELECT * 
+    	FROM meeting
+    	ORDER BY meetingTime DESC
+    	LIMIT #{startIndex},#{pageSize}
+    </select>
+    
+    <select id="checkForm" parameterType="java.lang.String" resultType="java.lang.String">
+    	SELECT password
+    	FROM admin
+    	WHERE account=#{account}
+    </select>
+    
+    <update id="updateObject" parameterType="org.iqalliance.smallProject.meeting.entity.Meeting">
+    	UPDATE meeting
+    	SET pptUrl=#{pptUrl}
+    	WHERE id=#{id}
+    </update>
+    
+    <update id="setLecInfo" parameterType="org.iqalliance.smallProject.meeting.entity.Meeting">
+    	UPDATE meeting
+    	SET imageUrl=#{imageUrl},
+    		introduction=#{introduction}
+    	WHERE lecturerName=#{lecturerName}
+    </update>
+</mapper> 
+
+
+
+

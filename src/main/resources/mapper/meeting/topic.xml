@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 
+ classpath:mapper/ProjectTypeMapper.xml
+ -->
+<mapper namespace="org.iqalliance.smallProject.meeting.dao.TopicDAO">
+    <insert id="saveObject" parameterType="org.iqalliance.smallProject.meeting.entity.Topic">
+    	REPLACE INTO topic
+	   	(topic)
+    	VALUES
+    	(#{topic})
+    </insert>
+</mapper> 
+
+
+
+

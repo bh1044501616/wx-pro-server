@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 
+ classpath:mapper/ProjectTypeMapper.xml
+ -->
+<mapper namespace="org.iqalliance.smallProject.news.dao.NewsDAO">
+	<insert id="saveObject" parameterType="org.iqalliance.smallProject.news.entity.News" useGeneratedKeys="true">
+		REPLACE INTO news
+		(theme,time,cover,detailUrl,digest,kind)
+		VALUES
+		(#{theme},#{time},#{cover},#{detailUrl},#{digest},#{kind})
+	</insert>
+	
+	 <!-- parameterType="org.iqalliance.smallProject.common.web.PageObject" -->
+	<select id="getPageObjects" resultType="map">
+		SELECT * FROM news
+		WHERE kind=#{kind}
+		ORDER BY time DESC
+    	LIMIT #{pageObject.startIndex},#{pageObject.pageSize}
+	</select>
+	
+	<update id="addPraise" parameterType="org.iqalliance.smallProject.news.entity.News">
+		UPDATE news
+		SET praise=praise+1
+		WHERE id=#{id}
+	</update>
+	
+	<update id="addWatch" parameterType="org.iqalliance.smallProject.news.entity.News">
+		UPDATE news
+		SET watch=watch+1
+		WHERE id=#{id}
+	</update>
+	
+	<select id="getPraise" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+		SELECT praise
+		FROM news
+		WHERE id=#{id}
+	</select>
+	
+	<select id="getWatch" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+		SELECT watch
+		FROM news
+		WHERE id=#{id}
+	</select>
+	
+	<select id="identifyTheme" parameterType="java.lang.String" resultType="java.lang.Integer">
+		SELECT id
+		FROM news
+		WHERE theme=#{theme}
+	</select>
+</mapper> 
+
+
+
+
