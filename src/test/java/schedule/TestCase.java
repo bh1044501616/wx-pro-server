@@ -16,8 +16,8 @@ public class TestCase extends BaseTest{
 	@Test
 	public void testGetObjectsByDate() {
 		ScheduleDAO dao = super.ac.getBean("scheduleDAO",ScheduleDAO.class);
-//		long secs = System.currentTimeMillis()-24*60*60*1000;
-//		Date now = new Date(secs);
+		long secs = System.currentTimeMillis()-24*60*60*1000*2;
+		Date now = new Date(secs);
 		List<Conference> c = dao.getObjectsByDate(new Date());
 		System.out.println(c);
 	}

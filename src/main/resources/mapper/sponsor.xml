@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 
+ classpath:mapper/ProjectTypeMapper.xml
+ -->
+<mapper namespace="org.iqalliance.smallProject.sponsor.dao.SponsorDAO">
+    <select id="getObjectsByAntistop" parameterType="java.util.ArrayList" resultMap="chosenSponsors">
+    	SELECT sid,name,company,pic,detail,antistop
+    	FROM antistops,sponsor
+    	WHERE sponsor.id=antistops.sid  AND sid IN
+	    	(SELECT DISTINCT sid
+	    	FROM antistops
+	    	<if test="list.size() != 0">
+		    	WHERE antistop IN
+		    	<foreach collection="list" open="(" close=")" separator="," item="item">
+		    		#{item}
+		    	</foreach>
+	    	</if>)
+    	GROUP BY antistop,sid,name,company,pic,detail
+    </select>
+    
+    <resultMap id="chosenSponsors" type="org.iqalliance.smallProject.sponsor.entity.Sponsor">
+   		<result property="id" column="sid"/>
+   		<result property="name" column="name"/>
+   		<result property="company" column="company"/>
+   		<result property="pic" column="pic"/>
+   		<result property="detail" column="detail"/>
+    	<collection property="antistops" ofType="java.lang.String">
+    		<result column="antistop"/>
+    	</collection>
+    </resultMap>
+</mapper> 
+
+
+
+

@@ -82,11 +82,19 @@ CREATE TABLE sponsor(
 	id int PRIMARY KEY AUTO_INCREMENT,
 	name VARCHAR(20),
 	company VARCHAR(20) NOT NULL,
-	pic VARCHAR(200) NOT NULL
+	pic VARCHAR(200) NOT NULL,
+	detail VARCHAR(200) NOT NULL
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE antistop(
 	antistop VARCHAR(30) PRIMARY KEY
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE antistops(
+	id int PRIMARY KEY AUTO_INCREMENT,
+	sid int NOT NULL,
+	antistop VARCHAR(30) NOT NULL,
+	FOREIGN KEY(sid) REFERENCES sponsor(id) ON UPDATE CASCADE ON DELETE CASCADE
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE forum(
@@ -109,6 +117,7 @@ CREATE TABLE ticket(
 
 
 --测试信息
+-----------------------1.1
 INSERT INTO domain
 VALUES
 ('质量体系论坛');
@@ -148,7 +157,7 @@ UPDATE lecture
 SET ppt='http://ppt.1ppt.com/uploads/soft/1807/1-1PI1164916.zip'
 WHERE lid=3;
 
--------------------------------
+-------------------------------1.2
 INSERT INTO domain
 VALUES
 ('管理论坛');
@@ -217,3 +226,22 @@ WHERE lid=6;
 UPDATE lecture
 SET ppt='http://ppt.1ppt.com/uploads/soft/1807/1-1PI1164916.zip'
 WHERE lid=7;
+
+-----------------------------2.1
+
+INSERT INTO sponsor
+(name,company,pic)
+VALUES
+('腾讯WeTest质量开放平台','腾讯WeTest','http://web1806060001.gz01.bdysite.com/static/kindeditor/attached/image/20180611/02d9d499fb29854d9327b01213ff85c7.jpg');
+
+INSERT INTO antistop
+(antistop)
+VALUES
+('助力研发效率 '),
+('保障产品品质');
+
+INSERT INTO antistops
+(sid,antistop)
+VALUES
+(4,'保障产品品质'),
+(4,'助力研发效率');
