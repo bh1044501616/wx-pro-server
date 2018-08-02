@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.iqalliance.smallProject.schedule.dao.ScheduleDAO">
+	<select id="getObjectsByDate" parameterType="java.util.Date" resultType="org.iqalliance.smallProject.schedule.entity.Conference">
+		SELECT * FROM conference
+		WHERE TO_DAYS(begintime)=TO_DAYS(#{date});
+	</select>
+	
+	<select id="getLecturerInfoById" resultMap="detailBox" parameterType="java.util.ArrayList">
+		SELECT cid,name,introduction,pic,ppt
+		FROM lecture,lecturer
+		WHERE lid=lecturer.id AND cid IN
+		<foreach collection="array" open="(" close=")" item="item" separator=",">
+			#{item}
+		</foreach>
+		GROUP BY name,introduction,pic,ppt,cid
+	</select>
+	
+	<resultMap id="detailBox" type="org.iqalliance.smallProject.schedule.entity.DetailBox">
+		<id column="cid" property="cid"/>
+		<collection property="details" ofType="org.iqalliance.smallProject.schedule.entity.Detail">
+			<result column="name" property="name"/>
+			<result column="introduction" property="introduction"/>
+			<result column="pic" property="pic"/>
+			<result column="ppt" property="ppt"/>
+		</collection>
+	</resultMap>
+</mapper> 
+
+
+
+

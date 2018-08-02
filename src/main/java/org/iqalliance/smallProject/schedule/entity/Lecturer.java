@@ -1,4 +1,4 @@
-package org.iqalliance.smallProject.meeting.entity;
+package org.iqalliance.smallProject.schedule.entity;
 
 public class Lecturer {
 	private int id;
