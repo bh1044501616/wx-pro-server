@@ -1,4 +1,4 @@
-package org.iqalliance.smallProject.common.web;
+package org.iqalliance.smallProject.common.service;
 
 import java.io.File;
 import java.io.FileInputStream;

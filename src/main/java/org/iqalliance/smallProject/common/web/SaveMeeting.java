@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.iqalliance.smallProject.common.service.MyCrawler;
 import org.iqalliance.smallProject.meeting.dao.LecturerDAO;
 import org.iqalliance.smallProject.meeting.dao.MeetingDAO;
 import org.iqalliance.smallProject.meeting.dao.ThemeDAO;

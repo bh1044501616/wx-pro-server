@@ -1,4 +1,4 @@
-package org.iqalliance.smallProject.common.web;
+package org.iqalliance.smallProject.common.service;
 
 import java.io.IOException;
 import java.io.InputStream;

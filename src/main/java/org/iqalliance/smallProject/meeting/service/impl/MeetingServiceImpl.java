@@ -11,7 +11,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.iqalliance.smallProject.common.web.MyCrawler;
+import org.iqalliance.smallProject.common.service.MyCrawler;
 import org.iqalliance.smallProject.common.web.PageObject;
 import org.iqalliance.smallProject.common.web.StaticValue;
 import org.iqalliance.smallProject.meeting.dao.LecturerDAO;

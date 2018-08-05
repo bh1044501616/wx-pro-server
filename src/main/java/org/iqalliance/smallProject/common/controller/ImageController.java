@@ -1,4 +1,4 @@
-package org.iqalliance.smallProject.meeting.controller;
+package org.iqalliance.smallProject.common.controller;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -9,23 +9,29 @@ import java.io.OutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.iqalliance.smallProject.common.service.ImageService;
+import org.iqalliance.smallProject.common.web.StaticValue;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping("/image")
 public class ImageController {
 	
+	@Autowired
+	private ImageService imageService;
 	
-	@RequestMapping("/meeting")
+	@RequestMapping("/image/{hashcode}")
 	//向meeting模块传输图片信息
-	public void doLoadMeetingImage(HttpServletRequest request,HttpServletResponse response) {
+	public void doLoadMeetingImage(HttpServletRequest request,HttpServletResponse response,@PathVariable("hashcode")String hashcode) {
+		
+		String path = imageService.getFilePath(hashcode);
+		if( path == null) {
+			String prefixPath = getClass().getResource("/").toString().substring(6);
+			path = prefixPath + File.separator + "files" + File.separator + "404.png";
+		}
 		String uri = request.getRequestURI();
-		String requestPath = request.getParameter("date");
-		String requestData = request.getParameter("data");
-		String absolutePath = getClass().getResource("/").toString();
-		String path = absolutePath.substring(6) + "files" + File.separator + "meeting"+ File.separator + requestPath + File.separator + requestData + ".jpg";
 		FileInputStream in = null;
 		OutputStream out = null;
 		if(new File(path).exists()) {

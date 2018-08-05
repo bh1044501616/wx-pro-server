@@ -19,4 +19,11 @@ public class SponsorService {
 		List sponsors = sponsorDAO.getObjectsByAntistop(list);
 		return sponsors;
 	}
+	
+	/*
+	 * 发送短信验证码，用以验证手机
+	 */
+	public String sendIdenMsg(String phone,String content) {
+		return null;
+	}
 }

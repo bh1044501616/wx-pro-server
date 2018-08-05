@@ -1,36 +1,34 @@
-package org.iqalliance.smallProject.meeting.controller;
+package org.iqalliance.smallProject.common.controller;
 
 import java.io.File;
-import java.io.FileFilter;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.io.UnsupportedEncodingException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.iqalliance.smallProject.common.service.DownloadService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping("/download")
 public class DownloadController {
-	@RequestMapping("/meeting")
-	public void doDownloadMeetingFile(HttpServletRequest request,HttpServletResponse response) {
+	
+	@Autowired
+	private DownloadService downloadService;
+	
+	@RequestMapping("/download/{hashcode}")
+	public void doDownloadMeetingFile(HttpServletRequest request,HttpServletResponse response,@PathVariable("hashcode")String hashcode) {
+		
 		//获取下载文件
-		String fileDate = request.getParameter("date");
-		String fileName = request.getParameter("name");
-		String pathSuffix = getClass().getResource("/").toString();
-		try {
-			fileName = new String(fileName.getBytes("ISO8859-1"),"UTF-8");
-		} catch (UnsupportedEncodingException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+		String path = downloadService.getFilePath(hashcode);
+		if(path == null) {
+			path = "";
 		}
-		String path = pathSuffix.substring(6) + "files" + File.separator + "meeting"+ File.separator + fileDate + File.separator + fileName;
-		System.out.println("下载数据的路径：" + path);
 		File file = new File(path);
 		//发送文件
 		if(file.exists()) {

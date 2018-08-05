@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 
+ classpath:mapper/ProjectTypeMapper.xml
+ -->
+<mapper namespace="org.iqalliance.smallProject.ticket.dao.TicketDAO">
+    <insert id="saveObject" parameterType="org.iqalliance.smallProject.ticket.entity.Ticket">
+    	INSERT INTO ticket
+    	(forum,name,company,position,phone,password,email)
+    	VALUES
+    	(#{forum},#{name},#{company},#{position},#{phone},#{password},#{email})
+    </insert>
+    
+    <select id="checkPhone" parameterType="java.lang.String" resultType="java.lang.Integer">
+    	SELECT id
+    	FROM ticket
+    	WHERE phone=#{phone}
+    </select>
+    
+    <update id="updateObject">
+    	UPDATE ticket
+    	SET paid=1,
+    		qrCode=#{qrCode}
+    	WHERE phone=#{phone}
+    </update>
+    
+</mapper> 
+
+
+
+

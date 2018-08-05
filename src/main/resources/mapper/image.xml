@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 
+ classpath:mapper/ProjectTypeMapper.xml
+ -->
+<mapper namespace="org.iqalliance.smallProject.common.dao.ImageDAO">
+	<insert id="saveObject" parameterType="org.iqalliance.smallProject.common.entity.Image">
+		INSERT INTO image
+		(hashcode,path)
+		VALUES
+		(#{hashcode},#{path})
+	</insert>
+	
+	<select id="getPath" parameterType="java.lang.String" resultType="java.lang.String">
+		SELECT path
+		FROM image
+		WHERE hashcode=#{hashcode}
+	</select>
+</mapper> 
+
+
+
+

@@ -7,6 +7,7 @@ public class JsonResult {
 	
 	private int state;
 	private Object data;
+	private String message;
 
 	public JsonResult() {
 		this.state = SUCCESS;
@@ -16,7 +17,20 @@ public class JsonResult {
 		this.state = SUCCESS;
 		this.data = data;
 	}
+
+	public JsonResult(String message) {
+		super();
+		this.state = 0;
+		this.message = message;
+	}
 	
+
+	public JsonResult(int state, String message) {
+		super();
+		this.state = state;
+		this.message = message;
+	}
+
 	public JsonResult(Throwable t) {
 		this.state = ERROR;
 		this.data = t.getMessage();
@@ -37,6 +51,16 @@ public class JsonResult {
 	public void setData(Object data) {
 		this.data = data;
 	}
+
+	public String getMessage() {
+		return message;
+	}
+
+	public void setMessage(String message) {
+		this.message = message;
+	}
+	
+	
 	
 	
 }

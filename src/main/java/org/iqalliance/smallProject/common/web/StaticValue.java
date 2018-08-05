@@ -4,5 +4,5 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class StaticValue {
-	public static final String URL = "http://39.107.227.165/wx/";
+	public static final String URL = "http://localhost:8080/smallProject1.0/";
 }
