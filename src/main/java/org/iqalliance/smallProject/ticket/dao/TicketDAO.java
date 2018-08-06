@@ -19,6 +19,7 @@ public interface TicketDAO {
 	 */
 	public int updateObject(@Param("phone")String phone,@Param("qrCode")String qrCode);
 	/*
-	 * 
+	 * 将符合信息要求的pay字段设置为0
 	 */
+	public int checkObject(@Param("phone")String phone);
 }

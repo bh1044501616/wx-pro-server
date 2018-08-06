@@ -24,6 +24,12 @@
     	WHERE phone=#{phone}
     </update>
     
+    <update id="checkObject">
+    	UPDATE ticket
+    	SET paid=0
+    	WHERE phone=#{phone}
+    </update>
+    
 </mapper> 
 
 

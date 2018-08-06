@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Map;
 
 import org.iqalliance.smallProject.common.dao.ImageDAO;
 import org.iqalliance.smallProject.common.entity.Image;
@@ -123,4 +124,24 @@ public class TicketService {
 		return flag_update;
 	}
 	
+	
+	/*
+	 * 将用户的支付状态设置为0，然后发送可以分发入场门牌的信息
+	 */
+	public int consumePay(Map<String,Object> map) {
+		
+		String phone = (String) map.get("phone");
+		String result = (String) map.get("qrCode");
+		int flag = 0;
+		
+		if(phone != null && result != null) {
+			if(phone.equals(result)) {
+				//验证通过
+				flag = ticketDAO.checkObject(phone);
+			}
+		}
+		
+		//当更新结果为1时，说明有数据更新，用户存在并且验证操作完成
+		return flag;
+	}
 }

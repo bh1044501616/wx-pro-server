@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.iqalliance.smallProject.common.service.DownloadService;
+import org.iqalliance.smallProject.common.web.JsonResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,7 +23,7 @@ public class DownloadController {
 	private DownloadService downloadService;
 	
 	@RequestMapping("/download/{hashcode}")
-	public void doDownloadMeetingFile(HttpServletRequest request,HttpServletResponse response,@PathVariable("hashcode")String hashcode) {
+	public JsonResult doDownloadMeetingFile(HttpServletRequest request,HttpServletResponse response,@PathVariable("hashcode")String hashcode) {
 		
 		//获取下载文件
 		String path = downloadService.getFilePath(hashcode);
@@ -73,9 +74,10 @@ public class DownloadController {
 						e.printStackTrace();
 					}
 				}
+				return new JsonResult();
 			}
 		}else {
-			System.out.println("文件不存在");
+			return new JsonResult("文件不存在");
 		}
 	}
 }
