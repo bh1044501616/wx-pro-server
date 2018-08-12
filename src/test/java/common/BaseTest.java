@@ -36,7 +36,7 @@ public class BaseTest {
 		ImageDAO imageDAO = this.ac.getBean("imageDAO",ImageDAO.class);
 		
 		Image image = new Image();
-		image.setPath("this is the path of the image");
+		image.setPath("C:\\Users\\Airbook\\Desktop\\tomcat\\wtpwebapps\\smallProject1.0\\WEB-INF\\classes\\files\\ticket\\noQrCode.png");
 		image.setHashcode(image.hashCode() + "");
 		
 		int flag = imageDAO.saveObject(image);

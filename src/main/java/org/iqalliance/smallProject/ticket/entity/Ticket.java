@@ -18,6 +18,14 @@ public class Ticket {
 	private String email;
 	/**ÃÜÂë*/
 	private String password;
+	/**¶þÎ¬ÂëµØÖ·*/
+	private String qrCode;
+	/**Ö§¸¶×´Ì¬*/
+	private Integer paid;
+	/**Î¢ÐÅÕËºÅ*/
+	private String wx_account;
+	
+	
 	public String getForum() {
 		return forum;
 	}
@@ -60,10 +68,30 @@ public class Ticket {
 	public void setPassword(String password) {
 		this.password = password;
 	}
+	
+	public String getQrCode() {
+		return qrCode;
+	}
+	public void setQrCode(String qrCode) {
+		this.qrCode = qrCode;
+	}
+	public Integer getPaid() {
+		return paid;
+	}
+	public void setPaid(Integer paid) {
+		this.paid = paid;
+	}
+	public String getWx_account() {
+		return wx_account;
+	}
+	public void setWx_account(String wx_account) {
+		this.wx_account = wx_account;
+	}
 	@Override
 	public String toString() {
 		return "Ticket [forum=" + forum + ", name=" + name + ", company=" + company + ", position=" + position
-				+ ", phone=" + phone + ", email=" + email + ", password=" + password + "]";
+				+ ", phone=" + phone + ", email=" + email + ", password=" + password + ", qrCode=" + qrCode + ", paid="
+				+ paid + ", wx_account=" + wx_account + "]";
 	}
 	
 }

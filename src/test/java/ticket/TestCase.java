@@ -84,4 +84,13 @@ public class TestCase extends BaseTest{
 			e.printStackTrace();
 		}
 	}
+	
+	@Test
+	public void tes6() {
+		//测试获取账号所有信息dao
+		TicketDAO ticketDAO = super.ac.getBean("ticketDAO",TicketDAO.class);
+		
+		Ticket ticket = ticketDAO.getObject("bh1044501616");
+		System.out.println(ticket);
+	}
 }

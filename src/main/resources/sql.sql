@@ -112,6 +112,7 @@ CREATE TABLE ticket(
 	email VARCHAR(50) NOT NULL,
 	paid TINYINT DEFAULT 0,
 	qrCode VARCHAR(200),
+	wx_account VARCHAR(30) UNIQUE,
 	FOREIGN KEY (forum) REFERENCES forum(forum) ON UPDATE CASCADE ON DELETE CASCADE
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -253,8 +254,24 @@ VALUES
 ('助力研发效率 '),
 ('保障产品品质');
 
+INSERT INTO antistop
+(antistop)
+VALUES
+('CMMI '),
+('模型 '),
+('成熟度 '),
+('成熟度级别 '),
+('过程改进 '),
+('组织能力 '),
+('SCAMPI '),
+('评估 '),
+('130年历史 '),
+('全球领先智能商圈领导者');
+
 INSERT INTO antistops
 (sid,antistop)
 VALUES
-(4,'保障产品品质'),
-(4,'助力研发效率');
+(1,'保障产品品质'),
+(1,'助力研发效率');
+
+

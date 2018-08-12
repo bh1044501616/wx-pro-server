@@ -1,10 +1,8 @@
 package org.iqalliance.smallProject.sponsor.controller;
 
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.servlet.http.HttpServletRequest;
+import java.util.Map;
 
 import org.iqalliance.smallProject.common.web.JsonResult;
 import org.iqalliance.smallProject.sponsor.service.SponsorService;
@@ -34,5 +32,16 @@ public class SponsorController {
 			data = sponsorService.getSponsorsByRequest(list);
 		}
 		return new JsonResult(data);
+	}
+	
+	@RequestMapping("/antistop")
+	@ResponseBody
+	public org.iqalliance.smallProject.common.web.JsonResult JsonResult() {
+		List<Map<String,String>> list = sponsorService.getAllAntistops();
+		if(list == null) {
+			return new JsonResult(new Exception());
+		}else {
+			return new JsonResult(list);
+		}
 	}
 }

@@ -29,6 +29,11 @@
     		<result column="antistop"/>
     	</collection>
     </resultMap>
+    
+    <select id="getAllAntistops" resultType="java.lang.String">
+    	SELECT *
+    	FROM antistop
+    </select>
 </mapper> 
 
 

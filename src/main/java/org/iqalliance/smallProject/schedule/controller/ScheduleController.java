@@ -44,7 +44,7 @@ public class ScheduleController {
 		if(data == null)
 			jsonResult = new JsonResult(new Exception());
 		jsonResult = new JsonResult(data);
-		String json = JSON.toJSONStringWithDateFormat(jsonResult, "yyyy-MM-dd");
+		String json = JSON.toJSONStringWithDateFormat(jsonResult, "HH:mm");
 		PrintWriter pw = null;
 		try {
 			pw = response.getWriter();

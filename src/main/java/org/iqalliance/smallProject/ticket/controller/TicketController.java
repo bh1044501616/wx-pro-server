@@ -1,8 +1,14 @@
 package org.iqalliance.smallProject.ticket.controller;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,6 +21,7 @@ import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.iqalliance.smallProject.common.service.MyQRCode;
 import org.iqalliance.smallProject.common.web.JsonResult;
+import org.iqalliance.smallProject.common.web.StaticValue;
 import org.iqalliance.smallProject.ticket.entity.Ticket;
 import org.iqalliance.smallProject.ticket.service.TicketService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,9 +29,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+
 @RequestMapping("/ticket")
 @Controller
 public class TicketController {
+	
+	private final String LOGIN_URL = "https://api.weixin.qq.com/sns/jscode2session?appid=wx5815e99cfb706cd3&secret=7f87c49cb08298e9ffa355601b1525a8&grant_type=authorization_code&js_code=";
 	
 	@Autowired
 	private TicketService ticketService;
@@ -38,7 +50,7 @@ public class TicketController {
 		System.out.println(ticket);
 		int flag = ticketService.saveTicket(ticket);
 		if(flag == 0) {
-			return new JsonResult(new Exception());
+			return new JsonResult("网络繁忙，请稍后");
 		}else if(flag == -1){
 			return new JsonResult("手机号已经被注册！");
 		}else {
@@ -46,6 +58,31 @@ public class TicketController {
 		}
 	}
 	
+	/*
+	 * 登陆账号
+	 */
+	@RequestMapping("/loginin")
+	@ResponseBody
+	public JsonResult doLoginIn(String phone,String wx_account,String password) {
+		if(wx_account != null) {
+			Ticket ticket = ticketService.getAccountInfo(wx_account);
+			return new JsonResult(ticket);
+		}else {
+			int flag = ticketService.checkPwd(phone, password);
+			if(flag == 1) {
+				Ticket ticket = ticketService.getAccountInfo(phone);
+				String qrCode = ticket.getQrCode();
+				if(qrCode == null || "".equals(qrCode)) {
+					ticket.setQrCode(StaticValue.URL + "image/1243171897.png");
+				}
+				return new JsonResult(ticket);
+			}else if(flag == 0) {
+				return new JsonResult("密码错误！");
+			}else {
+				return new JsonResult("账号不存在！");
+			}
+		}
+	}
 	
 	/*
 	 * 检测二维码真实性
@@ -64,7 +101,7 @@ public class TicketController {
 		}
 		if(flag == 1) {
 			return new JsonResult();
-		} else {
+		} else{
 			return new JsonResult("支付失败，请稍后重试！");
 		}
 	}
@@ -72,11 +109,19 @@ public class TicketController {
 	
 	@RequestMapping("/check")
 	@ResponseBody
-	public JsonResult doUpload(HttpServletRequest request) {
+	public JsonResult doUpload(String phone) {
 		
 		String message = "";
+		int flag = 0;
 		
-		//创建文件工厂对象
+		if(phone != null && !"".equals(phone)) {
+			flag = ticketService.consumePay(phone);
+		}
+		if(flag == 0) {
+			return new JsonResult("二维码无效！");
+		}
+		return new JsonResult();
+		/*//创建文件工厂对象
 		DiskFileItemFactory factory = new DiskFileItemFactory();
 		//设置缓冲流大小（当超过该大小后，文件就会被存储到一个临时存放地址）
 		factory.setSizeThreshold(1024*10);
@@ -133,5 +178,47 @@ public class TicketController {
 		}else {
 			return new JsonResult(message);
 		}
+	}
+	
+	
+	@RequestMapping("/login")
+	@ResponseBody
+	public JsonResult doLoginIn(String code) {
+		URL url;
+		OutputStream out = null;
+		BufferedReader in = null;
+		try {
+			url = new URL(LOGIN_URL + code);
+			URLConnection connection = url.openConnection();
+			
+			connection.setDoOutput(true);
+			connection.setDoInput(true);
+            
+			out = connection.getOutputStream();
+			
+			
+			in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+			String response = "";
+			String flag = null;
+			while((flag = in.readLine()) != null) {
+				response += flag;
+			}
+			
+			JSONObject jsonObject = (JSONObject) JSON.parse(response);
+			
+			
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			if(out != null) {
+				try {
+					out.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}*/
 	}
 }

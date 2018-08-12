@@ -50,12 +50,10 @@ public class WxCrawler {
 		
 		//截取获取的最新的数据
 		String latest = WxCrawler.formatUrl(str.substring(str.indexOf(prefixStr0) + prefixStr0.length(), str.indexOf(suffixStr0)));
-		//json格式化
 		String replace[] = new String[] {"&#39;", "'", "&quot;", "\"", "&nbsp;", " ", "&gt;", ">", "&lt;", "<", "&amp;", "&", "&yen;", "¥"};
 		for (int i=0;i< replace.length;i+= 2) {
 			latest=latest.replaceAll(replace[i],replace[i+1]);
 		}
-		//获取有用的值
 		JSONObject latestJson = JSON.parseObject(latest);
 		JSONArray latestJsonArray = latestJson.getJSONArray("list");
 		List<Map> list = new ArrayList<Map>();
@@ -142,9 +140,8 @@ public class WxCrawler {
 	
 	
 	public static String formatUrl(String str) {
-		//格式化url(复原腾讯所添加的干扰因素)
 		String formatedStr = null;
-		formatedStr = str/*.replaceAll("^[\\s\\uFEFF\\xA0]+|[\\s\\uFEFF\\xA0]+$","")*/.replaceAll("\\\\\\\\/", "/");
+		formatedStr = str.replaceAll("\\\\\\\\/", "/");
 		return formatedStr;
 	}
 	

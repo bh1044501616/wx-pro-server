@@ -6,9 +6,9 @@
 <mapper namespace="org.iqalliance.smallProject.ticket.dao.TicketDAO">
     <insert id="saveObject" parameterType="org.iqalliance.smallProject.ticket.entity.Ticket">
     	INSERT INTO ticket
-    	(forum,name,company,position,phone,password,email)
+    	(forum,name,company,position,phone,password,email,wx_account)
     	VALUES
-    	(#{forum},#{name},#{company},#{position},#{phone},#{password},#{email})
+    	(#{forum},#{name},#{company},#{position},#{phone},#{password},#{email},#{wx_account})
     </insert>
     
     <select id="checkPhone" parameterType="java.lang.String" resultType="java.lang.Integer">
@@ -21,14 +21,20 @@
     	UPDATE ticket
     	SET paid=1,
     		qrCode=#{qrCode}
-    	WHERE phone=#{phone}
+    	WHERE phone=#{phone} AND paid=0
     </update>
     
     <update id="checkObject">
     	UPDATE ticket
     	SET paid=0
-    	WHERE phone=#{phone}
+    	WHERE phone=#{phone} AND paid=1
     </update>
+    
+    <select id="getObject" parameterType="java.lang.String" resultType="org.iqalliance.smallProject.ticket.entity.Ticket">
+    	SELECT *
+    	FROM ticket
+   		WHERE wx_account=#{account} OR phone=#{account}
+    </select>
     
 </mapper> 
 

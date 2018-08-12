@@ -28,6 +28,7 @@ public class ScheduleService {
 			Conference conference = it.next();
 			
 			int id = conference.getId();
+			
 			String loc = conference.getLoc();
 			String domain = conference.getDomain();
 			String topic = conference.getTopic();
@@ -54,7 +55,6 @@ public class ScheduleService {
 				
 				Map<String,Object> schedule = new HashMap<String,Object>();
 				schedule.put("domain", domain);
-				
 				schedule.put("topics", topics);
 				
 				schedules.put(loc, schedule);

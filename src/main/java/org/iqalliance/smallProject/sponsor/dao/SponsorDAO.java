@@ -10,4 +10,8 @@ public interface SponsorDAO {
 	 * 查询符合请求内容的赞助商信息
 	 */
 	public List<Sponsor> getObjectsByAntistop(@Param("list")List list);
+	/*
+	 * 获取所有标签
+	 */
+	public List<String> getAllAntistops();
 }

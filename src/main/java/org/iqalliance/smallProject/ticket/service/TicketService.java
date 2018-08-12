@@ -48,7 +48,8 @@ public class TicketService {
 		}catch(NumberFormatException n) {
 			return 0;
 		}
-		if(ticketDAO.checkPhone(phone) > 0) {
+		Integer flag = ticketDAO.checkPhone(phone);
+		if(flag != null && flag > 0) {
 			//返回-1说明该手机号已经被注册
 			return -1;
 		}
@@ -72,9 +73,10 @@ public class TicketService {
 	 * 为用户进行分配支付二维码服务，并且标记用户已经支付
 	 */
 	public int pay(Ticket ticket) {
-		if( ticketDAO.checkPhone(ticket.getPhone()) < 1) {
+		String phone = ticket.getPhone();
+		if( ticketDAO.checkPhone(phone) == null) {
 			//无此用户
-			return 0;
+			return -1;
 		}
 		//生成二维码
 		String path = getClass().getResource("/files/ticket").toString().substring("file:/".length());
@@ -128,20 +130,43 @@ public class TicketService {
 	/*
 	 * 将用户的支付状态设置为0，然后发送可以分发入场门牌的信息
 	 */
-	public int consumePay(Map<String,Object> map) {
-		
-		String phone = (String) map.get("phone");
-		String result = (String) map.get("qrCode");
+	public int consumePay(String phone) {
 		int flag = 0;
 		
-		if(phone != null && result != null) {
-			if(phone.equals(result)) {
-				//验证通过
-				flag = ticketDAO.checkObject(phone);
-			}
-		}
+		//验证通过
+		flag = ticketDAO.checkObject(phone);
 		
 		//当更新结果为1时，说明有数据更新，用户存在并且验证操作完成
 		return flag;
+	}
+	
+	
+	/*
+	 * 验证密码
+	 */
+	public int checkPwd(String phone,String password) {
+		Ticket ticket = ticketDAO.getObject(phone);
+		
+		if(ticket != null) {
+			String pwd = ticket.getPassword();
+			if(pwd.equals(password)) {
+				//密码一致，验证通过
+				return 1;
+			}else {
+				//密码不对，验证失败
+				return 0;
+			}
+		}
+		//账号不存在
+		return -1;
+	}
+	
+	/*
+	 * 通过验证，获取账户信息
+	 * 	
+	 * 		若返回的值为null，则说明用微信登陆的还未进行注册
+	 */
+	public Ticket getAccountInfo(String account) {
+		return ticketDAO.getObject(account);
 	}
 }
