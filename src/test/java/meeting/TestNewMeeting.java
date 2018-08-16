@@ -3,11 +3,11 @@ package meeting;
 import java.util.Date;
 
 import org.iqalliance.smallProject.meeting.dao.ConferenceDAO;
-import org.iqalliance.smallProject.meeting.dao.LectureDAO;
+//import org.iqalliance.smallProject.meeting.dao.LectureDAO;
 import org.iqalliance.smallProject.meeting.dao.LecturerDAO;
 import org.iqalliance.smallProject.meeting.dao.ThemeDAO;
 import org.iqalliance.smallProject.meeting.dao.TopicDAO;
-import org.iqalliance.smallProject.meeting.entity.Lecture;
+//import org.iqalliance.smallProject.meeting.entity.Lecture;
 import org.iqalliance.smallProject.meeting.entity.Theme;
 import org.iqalliance.smallProject.meeting.entity.Topic;
 import org.iqalliance.smallProject.schedule.entity.Conference;
@@ -51,14 +51,14 @@ public class TestNewMeeting {
 //		conferenceDAO.saveObject(conference);
 //	}
 	
-	@Test
-	public void test1() {
-		LectureDAO lectureDAO = ac.getBean("lectureDAO",LectureDAO.class);
-		
-		Lecture lecture = new Lecture();
-		lecture.setCid(1);
-		lecture.setLid(1);
-		
-		lectureDAO.saveObject(lecture);
-	}
+//	@Test
+//	public void test1() {
+//		LectureDAO lectureDAO = ac.getBean("lectureDAO",LectureDAO.class);
+//		
+//		Lecture lecture = new Lecture();
+//		lecture.setCid(1);
+//		lecture.setLid(1);
+//		
+//		lectureDAO.saveObject(lecture);
+//	}
 }

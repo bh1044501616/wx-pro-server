@@ -5,6 +5,7 @@ public class Detail {
 	private String introduction;
 	private String pic;
 	private String ppt;
+	private String pptName;
 	public String getName() {
 		return name;
 	}
@@ -29,9 +30,17 @@ public class Detail {
 	public void setPpt(String ppt) {
 		this.ppt = ppt;
 	}
+	
+	public String getPptName() {
+		return pptName;
+	}
+	public void setPptName(String pptName) {
+		this.pptName = pptName;
+	}
 	@Override
 	public String toString() {
-		return "Detail [name=" + name + ", introduction=" + introduction + ", pic=" + pic + ", ppt=" + ppt + "]";
+		return "Detail [name=" + name + ", introduction=" + introduction + ", pic=" + pic + ", ppt=" + ppt
+				+ ", pptName=" + pptName + "]";
 	}
 	
 	

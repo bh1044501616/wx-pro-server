@@ -1,14 +1,14 @@
 package org.iqalliance.smallProject.common.dao;
 
-import org.iqalliance.smallProject.common.entity.Image;
+import org.iqalliance.smallProject.common.entity.Download;
 import org.springframework.stereotype.Repository;
 
 @Repository
 public interface DownloadDAO {
 	/*
-	 * 用于储存image对象
+	 * 用于储存download对象
 	 */
-	public int saveObject(Image image);
+	public Integer saveObject(Download download);
 	/*
 	 * 通过hashcode查询文件路径
 	 */

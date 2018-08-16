@@ -1,20 +1,39 @@
 package org.iqalliance.smallProject.common.controller;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.fileupload.FileUploadException;
+import org.apache.commons.fileupload.disk.DiskFileItemFactory;
+import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.iqalliance.smallProject.common.service.DownloadService;
+import org.iqalliance.smallProject.common.service.MyQRCode;
 import org.iqalliance.smallProject.common.web.JsonResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 
 @Controller
 public class DownloadController {
@@ -43,8 +62,8 @@ public class DownloadController {
 				e.printStackTrace();
 			}
 			try {
-				System.out.println(file.getName());
 				response.addHeader("Content-Disposition","attachment;filename=" + file.getName());
+				response.addHeader("Content-type","application/json");
 				in = new FileInputStream(file);
 				size = in.available();
 				response.addHeader("Content-length",size+"");
@@ -80,4 +99,6 @@ public class DownloadController {
 			return new JsonResult("文件不存在");
 		}
 	}
+
+	
 }

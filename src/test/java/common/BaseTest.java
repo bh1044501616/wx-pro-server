@@ -3,7 +3,9 @@ package common;
 import java.util.HashMap;
 
 import org.iqalliance.smallProject.common.dao.ImageDAO;
+import org.iqalliance.smallProject.common.entity.Download;
 import org.iqalliance.smallProject.common.entity.Image;
+import org.iqalliance.smallProject.common.service.DownloadService;
 import org.iqalliance.smallProject.common.web.HttpRequestUtil;
 import org.junit.Test;
 import org.springframework.context.ApplicationContext;
@@ -68,5 +70,20 @@ public class BaseTest {
 		System.out.println(image.hashCode());
 		image.setHashcode(565645+"");
 		System.out.println(image.hashCode());
+	}
+	
+	
+	@Test
+	/*
+	 * ≤‚ ‘¥Ê¥¢download∂‘œÛ
+	 */
+	public void test1() {
+		DownloadService downloadService = ac.getBean("downloadService",DownloadService.class);
+		Download d = new Download();
+		d.setPath("C:/Response.txt");
+		d.setHashcode(d.hashCode() + "");
+		
+		int flag = downloadService.saveDownloadObj(d);
+		Assert.assertEquals(1, flag);
 	}
 }

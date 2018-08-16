@@ -7,7 +7,7 @@
 	</select>
 	
 	<select id="getLecturerInfoById" resultMap="detailBox" parameterType="java.util.ArrayList">
-		SELECT cid,name,introduction,pic,ppt
+		SELECT cid,name,introduction,pic,ppt,pptName
 		FROM lecture,lecturer
 		WHERE lid=lecturer.id AND cid IN
 		<foreach collection="array" open="(" close=")" item="item" separator=",">
@@ -23,8 +23,24 @@
 			<result column="introduction" property="introduction"/>
 			<result column="pic" property="pic"/>
 			<result column="ppt" property="ppt"/>
+			<result column="pptName" property="pptName"/>
 		</collection>
 	</resultMap>
+	
+	
+	<update id="savePPT" parameterType="org.iqalliance.smallProject.schedule.entity.Lecture">
+		UPDATE lecture
+		SET ppt=#{ppt},
+			pptName=#{pptName}
+		WHERE cid=#{cid} AND lid=#{lid}
+	</update>
+	
+	<update id="savePic" parameterType="org.iqalliance.smallProject.schedule.entity.Lecturer">
+		UPDATE lecturer
+		SET pic=#{pic}
+		WHERE name=#{name}
+	</update>
+	
 </mapper> 
 
 
