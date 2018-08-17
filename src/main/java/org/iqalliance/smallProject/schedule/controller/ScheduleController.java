@@ -261,7 +261,7 @@ public class ScheduleController {
 					if(!dir.exists() || !dir.isDirectory()) {
 						dir.mkdir();
 					}
-					File file = new File(absolutePath + File.separator + name);
+					File file = new File((absolutePath + File.separator + name));
 					
 					FileOutputStream fos = new FileOutputStream(file);
 					
@@ -315,5 +315,10 @@ public class ScheduleController {
 	@RequestMapping("/savepic")
 	public String doSavePic() {
 		return "uploadPic";
+	}
+	
+	@RequestMapping("/load")
+	public String doLoadOnBrower() {
+		return "downloadPPT";
 	}
 }

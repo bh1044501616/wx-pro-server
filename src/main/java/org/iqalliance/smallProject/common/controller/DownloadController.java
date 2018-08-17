@@ -42,10 +42,14 @@ public class DownloadController {
 	private DownloadService downloadService;
 	
 	@RequestMapping("/download/{hashcode}")
+	@ResponseBody
 	public JsonResult doDownloadMeetingFile(HttpServletRequest request,HttpServletResponse response,@PathVariable("hashcode")String hashcode) {
+		
+		String message = "";
 		
 		//获取下载文件
 		String path = downloadService.getFilePath(hashcode);
+		System.out.println(path);
 		if(path == null) {
 			path = "";
 		}
@@ -71,11 +75,11 @@ public class DownloadController {
 				in.read(data);
 				out.write(data);
 			} catch (FileNotFoundException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
+				message = "请求数据错误";
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
+				message = "网络繁忙，请稍后重试！";
 			}finally {
 				if(in != null) {
 					try {
@@ -89,9 +93,11 @@ public class DownloadController {
 					try {
 						out.close();
 					} catch (IOException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
+				}
+				if(!"".equals(message)) {
+					return new JsonResult(message);
 				}
 				return new JsonResult();
 			}
