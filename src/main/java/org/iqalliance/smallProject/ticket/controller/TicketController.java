@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadException;
@@ -89,24 +90,29 @@ public class TicketController {
 	 */
 	@RequestMapping("pay")
 	@ResponseBody
-	public JsonResult doCheckMethod(Ticket ticket,String checkCode) {
+	public JsonResult doCheckMethod(Ticket ticket,String checkCode,HttpServletRequest request) {
 		
-		int flag = 0;
-		String phone = ticket.getPhone();
-		flag = ticketService.checkPwd(phone, "nopwd");
-		if(flag == -1) {
-			return new JsonResult("账号不存在！");
-		}
-		if( checkCode != null && !"".equals(checkCode) && "haoshaowen".equals(checkCode)) {
-			if(phone != null && !"".equals(phone)) {
-				//获得手机号信息
-				flag = ticketService.pay(ticket);
+		HttpSession session = request.getSession(false);
+		if(session != null) {
+			int flag = 0;
+			String phone = ticket.getPhone();
+			flag = ticketService.checkPwd(phone, "nopwd");
+			if(flag == -1) {
+				return new JsonResult("账号不存在！");
 			}
-		}
-		if(flag == 1) {
-			return new JsonResult();
+			if( checkCode != null && !"".equals(checkCode) && "haoshaowen".equals(checkCode)) {
+				if(phone != null && !"".equals(phone)) {
+					//获得手机号信息
+					flag = ticketService.pay(ticket);
+				}
+			}
+			if(flag == 1) {
+				return new JsonResult();
+			}else {
+				return new JsonResult("支付失败，请稍后重试！");
+			}
 		}else {
-			return new JsonResult("支付失败，请稍后重试！");
+			return new JsonResult("页面错误!");
 		}
 	}
 	

@@ -16,6 +16,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadException;
@@ -100,6 +101,12 @@ public class ScheduleController {
 	@RequestMapping("/savePPT")
 	@ResponseBody
 	public JsonResult doSaveDownloadObject(HttpServletRequest request) {
+		
+		HttpSession session = request.getSession(false);
+		if(session == null) {
+			return new JsonResult("页面错误！");
+		}
+		
 		String message = "";
 		
 		//创建文件工厂对象
@@ -231,8 +238,13 @@ public class ScheduleController {
 	}
 	
 	@RequestMapping("/saveppt")
-	public String doSavePPT() {
-		return "uploadPPT";
+	public String doSavePPT(HttpServletRequest request) {
+		HttpSession session = request.getSession(false);
+		if(session != null) {
+			return "uploadPPT";
+		}else {
+			return "message";
+		}
 	}
 	
 	@RequestMapping("/savePic")
@@ -242,6 +254,12 @@ public class ScheduleController {
 	 * 更改lecturer的照片信息
 	 */
 	public JsonResult doSaveImageObject(HttpServletRequest request) {
+		
+		HttpSession session = request.getSession(false);
+		if(session == null) {
+			return new JsonResult("页面错误！");
+		}
+		
 		String message = "";
 		
 		//创建文件工厂对象
@@ -345,8 +363,13 @@ public class ScheduleController {
 	}
 	
 	@RequestMapping("/savepic")
-	public String doSavePic() {
-		return "uploadPic";
+	public String doSavePic(HttpServletRequest request) {
+		HttpSession session = request.getSession(false);
+		if(session != null) {
+				return "uploadPic";
+		}else {
+			return "message";
+		}
 	}
 	
 	@RequestMapping("/load")

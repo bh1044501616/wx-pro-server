@@ -6,6 +6,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.iqalliance.smallProject.meeting.dao.MeetingDAO;
 import org.slf4j.Logger;
@@ -40,6 +41,8 @@ public class LoginController {
 			}
 			if(psw != null && psw.equals(password)) {
 				response.addCookie(new Cookie("account",account));
+				HttpSession session = request.getSession();
+				session.setAttribute("account", account);
 				return "admin";
 			}
 		}catch(RuntimeException e) {
