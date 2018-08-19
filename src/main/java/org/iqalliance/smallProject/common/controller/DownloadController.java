@@ -66,7 +66,7 @@ public class DownloadController {
 				e.printStackTrace();
 			}
 			try {
-				response.addHeader("Content-Disposition","attachment;filename=" + file.getName());
+				response.addHeader("Content-Disposition","attachment;filename=" + path.substring(path.lastIndexOf("/")));
 				response.addHeader("Content-type","application/json");
 				in = new FileInputStream(file);
 				size = in.available();

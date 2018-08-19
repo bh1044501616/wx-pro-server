@@ -5,6 +5,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -23,9 +24,12 @@ import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.iqalliance.smallProject.common.entity.Download;
 import org.iqalliance.smallProject.common.entity.Image;
 import org.iqalliance.smallProject.common.web.JsonResult;
+import org.iqalliance.smallProject.common.web.StaticValue;
 import org.iqalliance.smallProject.schedule.entity.Lecture;
 import org.iqalliance.smallProject.schedule.entity.Lecturer;
 import org.iqalliance.smallProject.schedule.service.ScheduleService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -38,6 +42,8 @@ import com.alibaba.fastjson.JSONArray;
 @Controller
 @RequestMapping("/schedule")
 public class ScheduleController {
+	
+	public static Logger LOGGER = LoggerFactory.getLogger(ScheduleController.class.getName());
 	
 	@Autowired
 	private ScheduleService scheduleService;
@@ -141,14 +147,28 @@ public class ScheduleController {
 					InputStream in = item.getInputStream();
 					byte[] data = new byte[1024*1024];
 					
-					File dir = new File(absolutePath + cid);
-					System.out.println(dir.getAbsolutePath());
+					absolutePath = absolutePath + cid;
+					File dir = new File(StaticValue.FILE_PATH + "schedule/ppt/" + cid);
+					LOGGER.info("获取存储目录的绝对地址" + dir.getAbsolutePath());
 					if(!dir.exists() || !dir.isDirectory()) {
-						dir.mkdir();
+						boolean dir_created = dir.mkdir();
+						if(dir_created) {
+							LOGGER.info("文件夹已创建成功");
+						}else {
+							LOGGER.info("文件夹创建失败");
+						}
 					}
-					File file = new File(absolutePath + cid + File.separator + name.substring(3));
-					System.out.println(file.getAbsolutePath());
-					
+					//将文件存储路径储存在项目目录外，为防止重新部署项目覆盖文件而文件丢失（下面的储存pic的方法一致）
+					File file = new File(StaticValue.FILE_PATH + "schedule/ppt/" + cid + File.separator + name.substring(3));
+					LOGGER.info("获取存储目录的绝对地址" + file.getAbsolutePath());
+					if(!file.exists()) {
+						boolean file_created = file.createNewFile();
+						if(file_created) {
+							LOGGER.info("文件已创建成功");
+						}else {
+							LOGGER.info("文件创建失败");
+						}
+					}
 					FileOutputStream fos = new FileOutputStream(file);
 					
 					int index = -1;
@@ -182,15 +202,25 @@ public class ScheduleController {
 			
 		} catch (FileUploadException e) {
 			message = "网络出现故障";
-			e.printStackTrace();
+			StringWriter sw = new StringWriter();
+			PrintWriter pw = new PrintWriter(sw); 
+			e.printStackTrace(pw);
+			LOGGER.error(sw.toString());
 		} catch (UnsupportedEncodingException e) {
 			message = "服务出错";
-			e.printStackTrace();
+			StringWriter sw = new StringWriter();
+			PrintWriter pw = new PrintWriter(sw); 
+			e.printStackTrace(pw);
+			LOGGER.error(sw.toString());
 		} catch (IOException e) {
 			message = "网络出现故障";
-			e.printStackTrace();
+			StringWriter sw = new StringWriter();
+			PrintWriter pw = new PrintWriter(sw); 
+			e.printStackTrace(pw);
+			LOGGER.error(sw.toString());
 		} catch(NumberFormatException n) {
 			message = "文件名称格式不正确！";
+			LOGGER.error(message);
 		}
 		
 		if("".equals(message)) {
@@ -257,12 +287,14 @@ public class ScheduleController {
 					InputStream in = item.getInputStream();
 					byte[] data = new byte[1024*1024];
 					
-					File dir = new File(absolutePath);
+					File dir = new File(StaticValue.FILE_PATH + "schedule/pic");
 					if(!dir.exists() || !dir.isDirectory()) {
 						dir.mkdir();
 					}
-					File file = new File((absolutePath + File.separator + name));
-					
+					File file = new File(StaticValue.FILE_PATH + "schedule/pic" + File.separator + name);
+					if(!file.exists()) {
+						file.createNewFile();
+					}
 					FileOutputStream fos = new FileOutputStream(file);
 					
 					int index = -1;

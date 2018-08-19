@@ -80,7 +80,7 @@ public class TicketService {
 		}
 		//Éú³É¶þÎ¬Âë
 		String path = getClass().getResource("/files/ticket").toString().substring("file:/".length());
-		String qrCodePath = path + File.separator + ticket.getPhone() + ".png";
+		String qrCodePath = StaticValue.FILE_PATH + "ticket/" + ticket.getPhone() + ".png";
 		
 		File file = new File(qrCodePath);
 		FileOutputStream fos = null;

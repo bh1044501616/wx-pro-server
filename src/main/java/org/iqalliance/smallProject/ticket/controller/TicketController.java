@@ -93,6 +93,10 @@ public class TicketController {
 		
 		int flag = 0;
 		String phone = ticket.getPhone();
+		flag = ticketService.checkPwd(phone, "nopwd");
+		if(flag == -1) {
+			return new JsonResult("账号不存在！");
+		}
 		if( checkCode != null && !"".equals(checkCode) && "haoshaowen".equals(checkCode)) {
 			if(phone != null && !"".equals(phone)) {
 				//获得手机号信息
@@ -101,7 +105,7 @@ public class TicketController {
 		}
 		if(flag == 1) {
 			return new JsonResult();
-		} else{
+		}else {
 			return new JsonResult("支付失败，请稍后重试！");
 		}
 	}
