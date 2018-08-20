@@ -41,6 +41,12 @@
 		WHERE name=#{name}
 	</update>
 	
+	
+	<select id="getLecturers" resultType="org.iqalliance.smallProject.schedule.entity.Lecturer">
+		SELECT *
+		FROM lecturer
+	</select>
+	
 </mapper> 
 
 

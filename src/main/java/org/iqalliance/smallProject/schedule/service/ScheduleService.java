@@ -143,4 +143,14 @@ public class ScheduleService {
 		}
 		return index;
 	}
+	
+	/*
+	 * 获取所有的演讲嘉宾
+	 * 
+	 * 		返回值：null-说明未获取到
+	 * 			   list-获取到的值
+	 */
+	public List<Lecturer> getAllLecturer() {
+		return scheduleDAO.getLecturers();
+	}
 }

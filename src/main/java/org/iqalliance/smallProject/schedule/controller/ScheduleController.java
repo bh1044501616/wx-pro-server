@@ -376,4 +376,18 @@ public class ScheduleController {
 	public String doLoadOnBrower() {
 		return "downloadPPT";
 	}
+	
+	@RequestMapping("/lecs")
+	@ResponseBody
+	public JsonResult getAllLecturer() {
+		LOGGER.info("申请获取演讲嘉宾信息");
+		List data = scheduleService.getAllLecturer();
+		if(data == null) {
+			LOGGER.debug("未获取到演讲嘉宾信息");
+			return new JsonResult("数据库出错");
+		}else {
+			return new JsonResult(data);
+		}
+	}
+	
 }

@@ -29,4 +29,8 @@ public interface ScheduleDAO {
 	 * 储存演讲人的照片
 	 */
 	public int savePic(Lecturer lecturer);
+	/*
+	 * 获取所有演讲嘉宾
+	 */
+	public List<Lecturer> getLecturers();
 }
