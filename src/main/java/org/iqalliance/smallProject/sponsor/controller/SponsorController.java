@@ -1,8 +1,11 @@
 package org.iqalliance.smallProject.sponsor.controller;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.iqalliance.smallProject.common.web.JsonResult;
 import org.iqalliance.smallProject.sponsor.service.SponsorService;
@@ -24,7 +27,11 @@ public class SponsorController {
 	@ResponseBody
 	@RequestMapping("/load")
 	public JsonResult getObjectsByAntistops(String antistopsStr) {
-		JSONArray list = JSON.parseArray(antistopsStr);
+		List list = null;
+		if(antistopsStr != null && !"".equals(antistopsStr)) {
+			String[] antistops = antistopsStr.split(",");
+			list = Arrays.asList(antistops);
+		}
 		List data = null;
 		if(list == null) {
 			data = sponsorService.getSponsorsByRequest(new ArrayList());
