@@ -71,7 +71,7 @@ public class DownloadController {
 				in = new FileInputStream(file);
 				size = in.available();
 				response.addHeader("Content-length",size+"");
-				byte[] data = new byte[size];
+				byte[] data = new byte[1024 * 1024];
 				in.read(data);
 				out.write(data);
 			} catch (FileNotFoundException e) {

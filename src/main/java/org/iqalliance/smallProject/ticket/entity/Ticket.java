@@ -24,7 +24,8 @@ public class Ticket {
 	private Integer paid;
 	/**微信账号*/
 	private String wx_account;
-	
+	/**管理员标识*/
+	private int admin;
 	
 	public String getForum() {
 		return forum;
@@ -87,11 +88,18 @@ public class Ticket {
 	public void setWx_account(String wx_account) {
 		this.wx_account = wx_account;
 	}
+	
+	public int getAdmin() {
+		return admin;
+	}
+	public void setAdmin(int admin) {
+		this.admin = admin;
+	}
 	@Override
 	public String toString() {
 		return "Ticket [forum=" + forum + ", name=" + name + ", company=" + company + ", position=" + position
 				+ ", phone=" + phone + ", email=" + email + ", password=" + password + ", qrCode=" + qrCode + ", paid="
-				+ paid + ", wx_account=" + wx_account + "]";
+				+ paid + ", wx_account=" + wx_account + ", admin=" + admin + "]";
 	}
 	
 }

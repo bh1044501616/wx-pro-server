@@ -11,6 +11,7 @@ import org.iqalliance.smallProject.common.entity.Image;
 import org.iqalliance.smallProject.common.service.MyQRCode;
 import org.iqalliance.smallProject.common.web.StaticValue;
 import org.iqalliance.smallProject.ticket.dao.TicketDAO;
+import org.iqalliance.smallProject.ticket.entity.QrCode;
 import org.iqalliance.smallProject.ticket.entity.Ticket;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,8 +26,6 @@ public class TicketService {
 	
 	@Autowired
 	private TicketDAO ticketDAO;
-	@Autowired
-	private ImageDAO imageDAO;
 	
 	/*
 	 * 存储ticket对象到数据库中
@@ -81,6 +80,7 @@ public class TicketService {
 		//生成二维码
 		String path = getClass().getResource("/files/ticket").toString().substring("file:/".length());
 		String qrCodePath = StaticValue.FILE_PATH + "ticket/" + ticket.getPhone() + ".png";
+//		String qrCodePath = path + "qrcode/" + ticket.getPhone() + ".png";
 		
 		File file = new File(qrCodePath);
 		FileOutputStream fos = null;
@@ -107,18 +107,18 @@ public class TicketService {
 		}
 
 		//存储二维码信息
-		Image image = new Image();
-		System.out.println(image.hashCode());
-		image.setHashcode(image.hashCode() + "");
-		image.setPath(qrCodePath);
-		System.out.println(image.hashCode());
+		QrCode qrcode = new QrCode();
+		System.out.println(qrcode.hashCode());
+		qrcode.setHashcode(qrcode.hashCode() + "");
+		qrcode.setPath(qrCodePath);
+		System.out.println(qrcode.hashCode());
 		
 		int flag_save = 0;
 		int flag_update = 0;
 		if(flag == true) {
-			flag_save = imageDAO.saveObject(image);
+			flag_save = ticketDAO.saveQrCode(qrcode);
 			if(flag_save == 1) {
-				String qrCode = StaticValue.URL + "image/" + image.hashCode() + ".png";
+				String qrCode = StaticValue.URL + "ticket/qrcode/" + qrcode.hashCode() + ".png";
 				flag_update = ticketDAO.updateObject(ticket.getPhone(), qrCode);
 			}
 		}
@@ -168,5 +168,13 @@ public class TicketService {
 	 */
 	public Ticket getAccountInfo(String account) {
 		return ticketDAO.getObject(account);
+	}
+	
+	public String getFilePath(String hashcode) {
+		String path = ticketDAO.getPath(hashcode);
+		if( path != null && !"".equals(hashcode)) {
+			return path;
+		}
+		return null;
 	}
 }

@@ -1,6 +1,7 @@
 package org.iqalliance.smallProject.ticket.dao;
 
 import org.apache.ibatis.annotations.Param;
+import org.iqalliance.smallProject.ticket.entity.QrCode;
 import org.iqalliance.smallProject.ticket.entity.Ticket;
 import org.springframework.stereotype.Repository;
 
@@ -26,4 +27,12 @@ public interface TicketDAO {
 	 * 通过手机号或者微信账号获取账号所有信息
 	 */
 	public Ticket getObject(@Param("account")String account);
+	/*
+	 * 用于储存qrcode对象
+	 */
+	public int saveQrCode(QrCode qrCode);
+	/*
+	 * 通过hashcode查询文件路径
+	 */
+	public String getPath(String hashcode);
 }

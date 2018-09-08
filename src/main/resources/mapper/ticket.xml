@@ -36,6 +36,19 @@
    		WHERE wx_account=#{account} OR phone=#{account}
     </select>
     
+    <insert id="saveQrCode" parameterType="org.iqalliance.smallProject.ticket.entity.QrCode">
+		INSERT INTO qrcode
+		(hashcode,path)
+		VALUES
+		(#{hashcode},#{path})
+	</insert>
+	
+	<select id="getPath" parameterType="java.lang.String" resultType="java.lang.String">
+		SELECT path
+		FROM qrcode
+		WHERE hashcode=#{hashcode}
+	</select>
+    
 </mapper> 
 
 

@@ -1,43 +1,35 @@
 package org.iqalliance.smallProject.ticket.controller;
 
-import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.io.UnsupportedEncodingException;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLConnection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.commons.fileupload.FileItem;
-import org.apache.commons.fileupload.FileUploadException;
-import org.apache.commons.fileupload.disk.DiskFileItemFactory;
-import org.apache.commons.fileupload.servlet.ServletFileUpload;
-import org.iqalliance.smallProject.common.service.MyQRCode;
 import org.iqalliance.smallProject.common.web.JsonResult;
 import org.iqalliance.smallProject.common.web.StaticValue;
+import org.iqalliance.smallProject.schedule.controller.ScheduleController;
 import org.iqalliance.smallProject.ticket.entity.Ticket;
 import org.iqalliance.smallProject.ticket.service.TicketService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
 
 @RequestMapping("/ticket")
 @Controller
 public class TicketController {
 	
 	private final String LOGIN_URL = "https://api.weixin.qq.com/sns/jscode2session?appid=wx5815e99cfb706cd3&secret=7f87c49cb08298e9ffa355601b1525a8&grant_type=authorization_code&js_code=";
+	
+	public static Logger LOGGER = LoggerFactory.getLogger(TicketController.class.getName());
 	
 	@Autowired
 	private TicketService ticketService;
@@ -64,13 +56,18 @@ public class TicketController {
 	 */
 	@RequestMapping("/loginin")
 	@ResponseBody
-	public JsonResult doLoginIn(String phone,String wx_account,String password) {
+	public JsonResult doLoginIn(String phone,String wx_account,String password,HttpServletRequest request) {
+		LOGGER.info("登陆ticket账户服务");
 		if(wx_account != null) {
+			LOGGER.info("微信登陆");
 			Ticket ticket = ticketService.getAccountInfo(wx_account);
 			return new JsonResult(ticket);
 		}else {
+			LOGGER.info("账号密码登陆");
 			int flag = ticketService.checkPwd(phone, password);
 			if(flag == 1) {
+				LOGGER.info("账号密码验证成功");
+				
 				Ticket ticket = ticketService.getAccountInfo(phone);
 				String qrCode = ticket.getQrCode();
 				if(qrCode == null || "".equals(qrCode)) {
@@ -78,8 +75,10 @@ public class TicketController {
 				}
 				return new JsonResult(ticket);
 			}else if(flag == 0) {
+				LOGGER.info("验证失败：密码错误");
 				return new JsonResult("密码错误！");
 			}else {
+				LOGGER.info("验证失败：账号不存在");
 				return new JsonResult("账号不存在！");
 			}
 		}
@@ -109,7 +108,7 @@ public class TicketController {
 			if(flag == 1) {
 				return new JsonResult();
 			}else {
-				return new JsonResult("支付失败，请稍后重试！");
+				return new JsonResult("账号已支付或者系统出错，请稍后重试！");
 			}
 		}else {
 			return new JsonResult("页面错误!");
@@ -232,5 +231,72 @@ public class TicketController {
 		}*/
 		
 	}
+	
+	@RequestMapping("/qrcode/{hashcode}")
+	@ResponseBody
+	public void doLoadMeetingImage(HttpServletRequest request,HttpServletResponse response,@PathVariable("hashcode")String hashcode) {
+		LOGGER.info("获取二维码服务");
+		//验证登陆状态
+		
+		String account = request.getParameter("account");
+		String password = request.getParameter("password");
+		
+		LOGGER.info("验证账号密码");
+		int flag = -1;
+		if(account != null && !"".equals(account) && password != null && !"".equals(password)) {
+			flag = ticketService.checkPwd(account, password);
+		}
+		if(flag == 1) {
+			LOGGER.info("验证密码成功，返回图片信息");
+			String path = ticketService.getFilePath(hashcode);
+			if( path == null) {
+				String prefixPath = getClass().getResource("/").toString().substring(6);
+				path = prefixPath + File.separator + "files" + File.separator + "404.png";
+			}
+			String uri = request.getRequestURI();
+			FileInputStream in = null;
+			OutputStream out = null;
+			if(new File(path).exists()) {
+				try {
+					 in = new FileInputStream(path);
+					 int size = in.available();
+					 byte[] data = new byte[size];
+					 in.read(data);
+					 //发送图片信息
+					 response.setContentType("image/jpg");
+					 out = response.getOutputStream();
+					 out.write(data);
+				} catch (FileNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}finally {
+					if(in != null) {
+						try {
+							in.close();
+						} catch (IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+					if(out != null) {
+						try {
+							out.close();
+						} catch (IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+				}
+			}else {
+				
+			}
+			System.out.println(path);
+		}
+		}
+				
+		
 	
 }
